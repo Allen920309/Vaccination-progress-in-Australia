@@ -1,0 +1,36 @@
+---
+title: "Vaccination"
+author: "Allen"
+date: "2021/8/24"
+output: html_document
+---
+
+```{r}
+country_vac <- read.csv("country_vaccinations.csv",header = TRUE)
+## daily_vaccinations_raw: daily change in the total number of doses administered. It is only calculated for consecutive days. This is a raw measure provided for data checks and transparency, but we strongly recommend that any analysis on daily vaccination rates be conducted using daily_vaccinations instead.
+## omit the NA rows
+## select the AUS
+new_vac <- na.omit(country_vac)
+Aus_vac <- subset(new_vac, country=='Australia')
+Aus_vac$date <- as.factor(Aus_vac$date)
+```
+
+```{r}
+par(mfrow = c(1,2))
+plot(Aus_vac$date,Aus_vac$people_vaccinated_per_hundred,xlab = "date",ylab = "people vaccinated per hundred",lty = 1,ylim = c(10,100))
+abline(h=100,col="red",lty= 1,lwd= 2)
+plot(Aus_vac$date,Aus_vac$people_fully_vaccinated_per_hundred,xlab = "date",ylab = "people fully vaccinated per hundred",lty = 1,ylim = c(0,100))
+abline(h=100,col="red",lty= 1,lwd= 2)
+```
+
+```{r}
+aug_12 <- subset(Aus_vac, date == "2021-08-12",select=c(people_vaccinated_per_hundred,people_fully_vaccinated_per_hundred))
+title <- c("people not vaccinated","people_vaccinated","people_fully_vaccinated")
+pie(c(100-sum(37.23,19.54),37.23,19.54), labels = title, main="Pie Chart of 8.12 vaccinations")
+```
+
+```{r}
+plot(Aus_vac$date,Aus_vac$people_vaccinated_per_hundred,xlab = "date",ylab = "people vaccinated per hundred",
+     lty = 1,ylim = c(0,40),col="blue")
+lines(Aus_vac$date,Aus_vac$people_fully_vaccinated_per_hundred,col = "green")
+```
